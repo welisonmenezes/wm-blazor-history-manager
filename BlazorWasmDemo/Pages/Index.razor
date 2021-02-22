@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">Voltar</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">Avançar</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Clear())">Limpar</button>
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    [Inject]
+    private IWMHistoryManager HisotryManager { get; set; }
+}
