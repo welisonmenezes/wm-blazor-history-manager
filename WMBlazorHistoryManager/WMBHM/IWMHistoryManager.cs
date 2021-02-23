@@ -21,4 +21,5 @@ public interface IWMHistoryManager
     void RemoveCallback(Action callback);
     Task Refresh();
     bool IsUsingBrowserNativeBehavior();
+    bool CanNavigate(int index);
 }

@@ -47,14 +47,7 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             this.backTitle = (this.HasBack()) ? await GetTitleByIndex((this.currentIndex - 1)) : null;
             this.forwardTitle = (this.HasForward()) ? await GetTitleByIndex((this.currentIndex + 1)) : null;
         }
-
-        if (this.clientCallbacks != null)
-        {
-            foreach (Action callback in this.clientCallbacks)
-            {
-                callback.Invoke();
-            }
-        }
+        this.RunCallbacks();
     }
 
     public async Task Back()
@@ -102,9 +95,8 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             var module = await this.Module;
             if (! this.useBrowserNativeBehavior)
             {
+                if (!CanNavigate(index)) return;
                 int newIndex = this.currentIndex - (index * -1);
-                if (index < 0 && newIndex < 0) return;
-                if (index > 0 && newIndex > this.totalIndex) return;
                 this.currentIndex = newIndex;
                 string newUrl = await module.InvokeAsync<string>("WMBHMNavigate", newIndex);
                 this.isNavitation = true;
@@ -117,6 +109,14 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         }
     }
 
+    public bool CanNavigate(int index)
+    {
+        int newIndex = this.currentIndex - (index * -1);
+        if (index < 0 && newIndex < 0) return false;
+        if (index > 0 && newIndex > this.totalIndex) return false;
+        return true;
+    }
+
     public async Task Clear()
     {
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
@@ -125,7 +125,7 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         this.backTitle = this.forwardTitle = null;
         this.isNavitation = false;
         this.isWatching = true;
-        //if (this.clientCallbacks != null)  clientCallbacks.Invoke();
+        this.RunCallbacks();
     }
 
     public bool HasForward()
@@ -202,5 +202,16 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     public bool IsUsingBrowserNativeBehavior()
     {
         return this.useBrowserNativeBehavior;
+    }
+
+    private void RunCallbacks()
+    {
+        if (this.clientCallbacks != null)
+        {
+            foreach (Action callback in this.clientCallbacks)
+            {
+                callback.Invoke();
+            }
+        }
     }
 }

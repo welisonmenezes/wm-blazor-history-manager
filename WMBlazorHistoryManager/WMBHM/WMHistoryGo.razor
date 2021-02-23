@@ -1,0 +1,72 @@
+@if (haveToShow)
+{
+    <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Go(Index))">
+        @Label
+    </button>
+}
+else
+{
+    if (OptionalContent != null)
+    {
+        @OptionalContent
+    }
+}
+
+@implements IDisposable
+
+@code {
+    [Parameter] public string Label { get; set; }
+    [Parameter] public int Index { get; set; }
+    [Parameter] public bool AlwaysVisible { get; set; } = false;
+    [Parameter] public RenderFragment OptionalContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> InputAttributes { get; set; }
+    [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
+
+    private bool isNativeBehavior { get; set; } = false;
+    private bool canNavigate { get; set; } = false;
+    private bool haveToShow { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        isNativeBehavior = HistoryManager.IsUsingBrowserNativeBehavior();
+
+        if (isNativeBehavior) 
+        {
+            setInfos();
+        }
+        else 
+        {
+            HistoryManager.SetCallback(setInfos);
+        }
+    }
+
+    protected void setInfos()
+    {
+        canNavigate = HistoryManager.CanNavigate(Index);
+
+        if (isNativeBehavior)
+        {
+            haveToShow = true;
+        }
+        else
+        {
+            if (AlwaysVisible)
+            {
+                haveToShow = true;
+            }
+            else
+            {
+                haveToShow = ((Index > 0 && canNavigate) || (Index < 0 && canNavigate));
+            }
+        }
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (! isNativeBehavior)
+        {
+            HistoryManager.RemoveCallback(setInfos);
+        }
+    }
+}
