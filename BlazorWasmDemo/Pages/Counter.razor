@@ -5,12 +5,18 @@
 <p>Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">Voltar</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">Avançar</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
+    Voltar para : @backTitle;
+</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
+    Avançar para: @forwardTitle;
+</button>
 
 @code {
     [Inject]
     private IWMHistoryManager HisotryManager { get; set; }
+    private string backTitle { get; set; }
+    private string forwardTitle { get; set; }
     private int currentCount = 0;
 
     private void IncrementCount()
@@ -21,5 +27,13 @@
     protected override async Task OnInitializedAsync()
     {
         await HisotryManager.SetPageTitle("Counter");
+        HisotryManager.SetCallback(setInfos);
+    }
+
+    protected void setInfos()
+    {
+        backTitle = HisotryManager.GetBackTitle();
+        forwardTitle = HisotryManager.GetForwardTitle();
+        StateHasChanged();
     }
 }

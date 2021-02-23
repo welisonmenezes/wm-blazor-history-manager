@@ -34,18 +34,32 @@ else
     </table>
 }
 
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">Voltar</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">Avançar</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
+    Voltar para : @backTitle;
+</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
+    Avançar para: @forwardTitle;
+</button>
 
 @code {
     [Inject]
     private IWMHistoryManager HisotryManager { get; set; }
+    private string backTitle { get; set; }
+    private string forwardTitle { get; set; }
     private WeatherForecast[] forecasts;
 
     protected override async Task OnInitializedAsync()
     {
         await HisotryManager.SetPageTitle("Fetch Data");
+        HisotryManager.SetCallback(setInfos);
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+    }
+
+    protected void setInfos()
+    {
+        backTitle = HisotryManager.GetBackTitle();
+        forwardTitle = HisotryManager.GetForwardTitle();
+        StateHasChanged();
     }
 
     public class WeatherForecast

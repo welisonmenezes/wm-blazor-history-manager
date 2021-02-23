@@ -4,9 +4,13 @@
 
 Welcome to your new app.
 
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">Voltar</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">Avançar</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Go(-1))">Voltar -1</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
+    Voltar para : @backTitle;
+</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
+    Avançar para: @forwardTitle;
+</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Go(-1))"> Voltar -1</button>
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.Go(+1))">Avançar +1</button>
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.Clear())">Limpar</button>
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.StopWatch())">Stop Watch</button>
@@ -18,8 +22,19 @@ Welcome to your new app.
     [Inject]
     private IWMHistoryManager HisotryManager { get; set; }
 
+    private string backTitle { get; set; }
+    private string forwardTitle { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await HisotryManager.SetPageTitle("Home");
+        HisotryManager.SetCallback(setInfos);
+    }
+
+    protected void setInfos()
+    {
+        backTitle = HisotryManager.GetBackTitle();
+        forwardTitle = HisotryManager.GetForwardTitle();
+        StateHasChanged();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +14,9 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     private bool isNavitation { get; set; } = false;
     private bool isWatching { get; set; } = true;
     private string currentTitle { get; set; }
+    private string backTitle { get; set; }
+    private string forwardTitle { get; set; }
+    private Action clientCallback { get; set; }
     
     public WMHistoryManagerCore(IJSRuntime jsRuntime, NavigationManager navigationManager)
     {
@@ -28,11 +32,10 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMPush", url);
             this.currentTitle = await module.InvokeAsync<string>("WMBHMGetCurrentTitle");
         }
-        
-        if (this.isNavitation)
-        {
-            this.isNavitation = false;
-        }
+        if (this.isNavitation)  this.isNavitation = false;
+        this.backTitle = (this.HasBack()) ? await GetTitleByIndex((this.currentIndex - 1)) : null;
+        this.forwardTitle = (this.HasForward()) ? await GetTitleByIndex((this.currentIndex + 1)) : null;
+        if (this.clientCallback != null)  clientCallback.Invoke();
     }
 
     public async Task Back()
@@ -43,10 +46,8 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             var module = await this.Module;
             string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
             this.isNavitation = true;
-            System.Console.WriteLine(backUrl);
             navigationManager.NavigateTo(backUrl);
         }
-        
     }
 
     public async Task Forward()
@@ -57,7 +58,6 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             var module = await this.Module;
             string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
             this.isNavitation = true;
-            System.Console.WriteLine(forwardUrl);
             navigationManager.NavigateTo(forwardUrl);
         }
     }
@@ -73,7 +73,6 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             var module = await this.Module;
             string newUrl = await module.InvokeAsync<string>("WMBHMNavigate", newIndex);
             this.isNavitation = true;
-            System.Console.WriteLine(newUrl);
             navigationManager.NavigateTo(newUrl);
         }
     }
@@ -108,5 +107,26 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     {
         var module = await this.Module;
         await module.InvokeVoidAsync("WMBHMSetPageTitle", title);
+    }
+
+    public async Task<string> GetTitleByIndex(int index)
+    {
+        var module = await this.Module;
+        return await module.InvokeAsync<string>("WMBHMGetTitleByIndex", index);
+    }
+
+    public string GetBackTitle()
+    {
+        return this.backTitle;
+    }
+
+    public string GetForwardTitle()
+    {
+        return this.forwardTitle;
+    }
+
+    public void SetCallback(Action callback)
+    {
+        this.clientCallback = callback;
     }
 }

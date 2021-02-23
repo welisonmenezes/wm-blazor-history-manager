@@ -5,7 +5,6 @@ export function WMBHMPush(url) {
         url: url,
         title: title
     };
-
     if ((entries.length < 1) || (entries[entries.length - 1] && entries[entries.length - 1].url !== url)) {
         entries.push(newEntry);
         window.sessionStorage.setItem('wmbhm-entries', JSON.stringify(entries));
@@ -37,6 +36,11 @@ export function WMBHMSetPageTitle(title) {
 export function WMBHMGetCurrentTitle() {
     var tagTitle = document.querySelector('title');
     return (tagTitle) ? tagTitle.innerText : null;
+}
+
+export function WMBHMGetTitleByIndex(index) {
+    var entries = getEntries();
+    return (entries[index]) ? entries[index].title : null;
 }
 
 function getEntries() {
