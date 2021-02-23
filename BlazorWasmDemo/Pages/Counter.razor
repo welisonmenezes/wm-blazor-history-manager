@@ -17,4 +17,9 @@
     {
         currentCount++;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await HisotryManager.SetPageTitle("Counter");
+    }
 }

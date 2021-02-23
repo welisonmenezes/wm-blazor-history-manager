@@ -1,6 +1,10 @@
 export function WMBHMPush(url) {
     var entries = getEntries();
-    var newEntry = { url: url };
+    var title = WMBHMGetCurrentTitle();
+    var newEntry = { 
+        url: url,
+        title: title
+    };
 
     if ((entries.length < 1) || (entries[entries.length - 1] && entries[entries.length - 1].url !== url)) {
         entries.push(newEntry);
@@ -25,6 +29,15 @@ export function WMBHMClear(url) {
     return WMBHMPush(url);
 }
 
+export function WMBHMSetPageTitle(title) {
+    var tagTitle = document.querySelector('title');
+    if (tagTitle) tagTitle.innerHTML = title;
+}
+
+export function WMBHMGetCurrentTitle() {
+    var tagTitle = document.querySelector('title');
+    return (tagTitle) ? tagTitle.innerText : null;
+}
 
 function getEntries() {
     var oldEntries = JSON.parse(window.sessionStorage.getItem('wmbhm-entries'));

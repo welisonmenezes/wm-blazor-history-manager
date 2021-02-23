@@ -10,7 +10,9 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     private Task<IJSObjectReference> Module => _module ??= jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/WMBlazorHistoryManager/wm-blazor-history-manager.js").AsTask();
     private int currentIndex { get; set; } = 0;
     private int totalIndex { get; set; } = 0;
-    private bool WMHMNavigation { get; set; } = false;
+    private bool isNavitation { get; set; } = false;
+    private bool isWatching { get; set; } = true;
+    private string currentTitle { get; set; }
     
     public WMHistoryManagerCore(IJSRuntime jsRuntime, NavigationManager navigationManager)
     {
@@ -18,22 +20,18 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         this.navigationManager = navigationManager;
     }
 
-    public void Go(int step)
-    {
-        System.Console.WriteLine("Go");
-    }
-
     public async Task Push(string url)
     {   
-        if (! this.WMHMNavigation) 
+        if (! this.isNavitation && this.isWatching) 
         {
             var module = await this.Module;
-            totalIndex = currentIndex = await module.InvokeAsync<int>("WMBHMPush", url);
-            System.Console.WriteLine("" + currentIndex);
+            this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMPush", url);
+            this.currentTitle = await module.InvokeAsync<string>("WMBHMGetCurrentTitle");
         }
-        else
+        
+        if (this.isNavitation)
         {
-            this.WMHMNavigation = false;
+            this.isNavitation = false;
         }
     }
 
@@ -44,7 +42,7 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             this.currentIndex--;
             var module = await this.Module;
             string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
-            this.WMHMNavigation = true;
+            this.isNavitation = true;
             System.Console.WriteLine(backUrl);
             navigationManager.NavigateTo(backUrl);
         }
@@ -58,9 +56,25 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             this.currentIndex++;
             var module = await this.Module;
             string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
-            this.WMHMNavigation = true;
+            this.isNavitation = true;
             System.Console.WriteLine(forwardUrl);
             navigationManager.NavigateTo(forwardUrl);
+        }
+    }
+
+    public async Task Go(int index)
+    {
+        if (index != 0)
+        {
+            int newIndex = this.currentIndex - (index * -1);
+            if (index < 0 && newIndex < 0) return;
+            if (index > 0 && newIndex > this.totalIndex) return;
+            this.currentIndex = newIndex;
+            var module = await this.Module;
+            string newUrl = await module.InvokeAsync<string>("WMBHMNavigate", newIndex);
+            this.isNavitation = true;
+            System.Console.WriteLine(newUrl);
+            navigationManager.NavigateTo(newUrl);
         }
     }
 
@@ -78,5 +92,21 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     public bool HasBack()
     {
         return (this.currentIndex > 0);
+    }
+
+    public void StopWatch()
+    {
+        this.isWatching = false;
+    }
+
+    public void RestoreWatch()
+    {
+        this.isWatching = true;
+    }
+
+    public async Task SetPageTitle(string title)
+    {
+        var module = await this.Module;
+        await module.InvokeVoidAsync("WMBHMSetPageTitle", title);
     }
 }
