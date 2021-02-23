@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -17,12 +18,14 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     private string currentTitle { get; set; }
     private string backTitle { get; set; }
     private string forwardTitle { get; set; }
-    private Action clientCallback { get; set; }
+    private List<Action> clientCallbacks { get; set; }
+    private EventHandler WMHMEventHandler { get; set; }
     
     public WMHistoryManagerCore(IJSRuntime jsRuntime, NavigationManager navigationManager)
     {
         this.jsRuntime = jsRuntime;
         this.navigationManager = navigationManager;
+        this.clientCallbacks = new List<Action>();
     }
 
     public void Configure(bool useBrowserNativeBehavior)
@@ -44,7 +47,14 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             this.backTitle = (this.HasBack()) ? await GetTitleByIndex((this.currentIndex - 1)) : null;
             this.forwardTitle = (this.HasForward()) ? await GetTitleByIndex((this.currentIndex + 1)) : null;
         }
-        if (this.clientCallback != null)  clientCallback.Invoke();
+
+        if (this.clientCallbacks != null)
+        {
+            foreach (Action callback in this.clientCallbacks)
+            {
+                callback.Invoke();
+            }
+        }
     }
 
     public async Task Back()
@@ -115,7 +125,7 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         this.backTitle = this.forwardTitle = null;
         this.isNavitation = false;
         this.isWatching = true;
-        if (this.clientCallback != null)  clientCallback.Invoke();
+        //if (this.clientCallbacks != null)  clientCallbacks.Invoke();
     }
 
     public bool HasForward()
@@ -169,12 +179,28 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
 
     public void SetCallback(Action callback)
     {
-        this.clientCallback = callback;
+        if (! this.useBrowserNativeBehavior)
+        {
+            this.clientCallbacks.Add(callback);
+        }
+    }
+
+    public void RemoveCallback(Action callback)
+    {
+        if (! this.useBrowserNativeBehavior)
+        {
+            this.clientCallbacks.Clear();
+        }
     }
 
     public async Task Refresh()
     {
         var module = await this.Module;
         await module.InvokeVoidAsync("WMBHMRefresh");
+    }
+
+    public bool IsUsingBrowserNativeBehavior()
+    {
+        return this.useBrowserNativeBehavior;
     }
 }

@@ -18,5 +18,7 @@ public interface IWMHistoryManager
     string GetBackTitle();
     string GetForwardTitle();
     void SetCallback(Action callback);
+    void RemoveCallback(Action callback);
     Task Refresh();
+    bool IsUsingBrowserNativeBehavior();
 }

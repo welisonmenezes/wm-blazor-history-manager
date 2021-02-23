@@ -4,11 +4,10 @@
 
 @code
 {
-    [Inject]
-    protected IWMHistoryManager HistoryManager { get; set; } = null;
+    [Parameter] public bool ClearOnReload { get; set; } = false;
 
-    [Inject]
-    protected NavigationManager NavigationManager { get; set; } = null;
+    [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
+    [Inject] protected NavigationManager NavigationManager { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,6 +21,10 @@
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
+            if (ClearOnReload && ! HistoryManager.IsUsingBrowserNativeBehavior())
+            {
+                await HistoryManager.Clear();
+            }
             await OnLocationChanged(NavigationManager.Uri);
         }
     }

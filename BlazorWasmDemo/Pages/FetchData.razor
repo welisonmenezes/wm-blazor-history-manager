@@ -51,7 +51,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await HisotryManager.SetPageTitle("Fetch Data");
-        HisotryManager.SetCallback(setInfos);
+        //HisotryManager.SetCallback(setInfos);
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
     }
 

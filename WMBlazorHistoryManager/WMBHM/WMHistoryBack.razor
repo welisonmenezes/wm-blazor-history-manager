@@ -1,0 +1,83 @@
+@if (haveToShow)
+{
+    <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Back())">
+        @Label
+        @if (ConcatPageTitle)
+        {
+            @backTitle
+        }
+    </button>
+}
+else
+{
+    if (OptionalContent != null)
+    {
+        @OptionalContent
+    }
+}
+
+@implements IDisposable
+
+@code {
+    [Parameter] public string Label { get; set; }
+    [Parameter] public bool ConcatPageTitle { get; set; } = false;
+    [Parameter] public string SetPageTitle { get; set; }
+    [Parameter] public bool AlwaysVisible { get; set; } = false;
+    [Parameter] public RenderFragment OptionalContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> InputAttributes { get; set; }
+        
+    [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
+
+    private string backTitle { get; set; }
+    private bool haveToShow { get; set; } = false;
+    private bool isNativeBehavior { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isNativeBehavior = HistoryManager.IsUsingBrowserNativeBehavior();
+
+        if (SetPageTitle != null)
+        {
+            await HistoryManager.SetPageTitle(SetPageTitle);
+        }
+
+        if (isNativeBehavior) 
+        {
+            setInfos();
+        }
+        else 
+        {
+            HistoryManager.SetCallback(setInfos);
+        }
+    }
+
+    protected void setInfos()
+    {
+        if (isNativeBehavior)
+        {
+            haveToShow = true;
+        }
+        else
+        {
+            backTitle = HistoryManager.GetBackTitle();
+            if (AlwaysVisible)
+            {
+                haveToShow = true;
+            }
+            else
+            {
+                haveToShow = (backTitle != null) ? true : false;
+            }
+        }
+        
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (! isNativeBehavior)
+        {
+            HistoryManager.RemoveCallback(setInfos);
+        }
+    }
+}

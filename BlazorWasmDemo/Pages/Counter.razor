@@ -27,13 +27,13 @@
     protected override async Task OnInitializedAsync()
     {
         await HisotryManager.SetPageTitle("Counter");
-        HisotryManager.SetCallback(setInfos);
+        //HisotryManager.SetCallback(setInfos);
     }
 
     protected void setInfos()
     {
-        backTitle = HisotryManager.GetBackTitle();
-        forwardTitle = HisotryManager.GetForwardTitle();
+        //backTitle = HisotryManager.GetBackTitle();
+        //forwardTitle = HisotryManager.GetForwardTitle();
         StateHasChanged();
         System.Console.WriteLine("Callback Counter");
     }

@@ -5,6 +5,7 @@ export function WMBHMPush(url) {
         entries.push(newEntry);
         window.sessionStorage.setItem('wmbhm-entries', JSON.stringify(entries));
     }
+    console.log(entries)
     return entries.length - 1;
 }
 

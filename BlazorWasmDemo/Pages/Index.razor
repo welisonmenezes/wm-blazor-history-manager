@@ -4,39 +4,28 @@
 
 Welcome to your new app.
 
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
-    Voltar para : @backTitle;
-</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
-    Avançar para: @forwardTitle;
-</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Go(-1))"> Voltar -1</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Go(+1))">Avançar +1</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Clear())">Limpar</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.StopWatch())">Stop Watch</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.RestoreWatch())">Restore Watch</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Refresh())">Refresh</button>
+<br><hr><br>
+
+<WMHistoryBack 
+    Label="Voltar para: "
+    ConcatPageTitle="true"
+    AlwaysVisible="false"
+    SetPageTitle="Home Page"
+    class="btn btn-primary">
+    <OptionalContent>
+        <a href="/">Go Back Home</a>
+    </OptionalContent>
+</WMHistoryBack>
+
+<WMHistoryForward 
+    Label="Avançar para: "
+    ConcatPageTitle="true"
+    AlwaysVisible="false"
+    class="btn btn-primary">
+    <OptionalContent>
+        <a href="/">Go Back Home</a>
+    </OptionalContent>
+</WMHistoryForward>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-@code {
-    [Inject]
-    private IWMHistoryManager HisotryManager { get; set; }
-
-    private string backTitle { get; set; }
-    private string forwardTitle { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await HisotryManager.SetPageTitle("Home");
-        HisotryManager.SetCallback(setInfos);
-    }
-
-    protected void setInfos()
-    {
-        backTitle = HisotryManager.GetBackTitle();
-        forwardTitle = HisotryManager.GetForwardTitle();
-        StateHasChanged();
-        System.Console.WriteLine("Callback Index");
-    }
-}

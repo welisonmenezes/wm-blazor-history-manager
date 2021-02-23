@@ -19,7 +19,7 @@ namespace BlazorWasmDemo
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddWMHistoryManager();
+            builder.Services.AddWMHistoryManager(false);
 
             await builder.Build().RunAsync();
         }
