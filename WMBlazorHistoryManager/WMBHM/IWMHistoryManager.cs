@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 public interface IWMHistoryManager
 {
+    void Configure(bool useBrowserNativeBehavior);
     Task Go(int index);
     Task Forward();
     Task Push(string url);

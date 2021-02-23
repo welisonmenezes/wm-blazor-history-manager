@@ -43,6 +43,23 @@ export function WMBHMGetTitleByIndex(index) {
     return (entries[index]) ? entries[index].title : null;
 }
 
+export function WMBHMRefresh () {
+    window.history.go();
+}
+
+export function WMBHMNativeState () {
+    return window.history.state ?? {};
+}
+
+export function WMBHMNativePush (state, url) {
+    var title = WMBHMGetCurrentTitle();
+    window.history.pushState(state, title, url);
+}
+
+export function WMBHMNativeNavigate (index) {
+    window.history.go(index);
+}
+
 function getEntries() {
     var oldEntries = JSON.parse(window.sessionStorage.getItem('wmbhm-entries'));
     return (oldEntries && Array.isArray(oldEntries)) ? oldEntries : [];
