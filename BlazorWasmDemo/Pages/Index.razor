@@ -15,6 +15,7 @@ Welcome to your new app.
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.Clear())">Limpar</button>
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.StopWatch())">Stop Watch</button>
 <button class="btn btn-primary" @onclick="@(e => HisotryManager.RestoreWatch())">Restore Watch</button>
+<button class="btn btn-primary" @onclick="@(e => HisotryManager.Refresh())">Refresh</button>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
@@ -33,9 +34,9 @@ Welcome to your new app.
 
     protected void setInfos()
     {
-        //backTitle = HisotryManager.GetBackTitle();
-        //forwardTitle = HisotryManager.GetForwardTitle();
-        //StateHasChanged();
+        backTitle = HisotryManager.GetBackTitle();
+        forwardTitle = HisotryManager.GetForwardTitle();
+        StateHasChanged();
         System.Console.WriteLine("Callback Index");
     }
 }

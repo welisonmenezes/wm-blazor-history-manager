@@ -18,4 +18,5 @@ public interface IWMHistoryManager
     string GetBackTitle();
     string GetForwardTitle();
     void SetCallback(Action callback);
+    Task Refresh();
 }

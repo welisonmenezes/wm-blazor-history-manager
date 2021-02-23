@@ -112,6 +112,10 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
         var module = await this.Module;
         this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMClear", navigationManager.Uri);
+        this.backTitle = this.forwardTitle = null;
+        this.isNavitation = false;
+        this.isWatching = true;
+        if (this.clientCallback != null)  clientCallback.Invoke();
     }
 
     public bool HasForward()
@@ -166,5 +170,11 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     public void SetCallback(Action callback)
     {
         this.clientCallback = callback;
+    }
+
+    public async Task Refresh()
+    {
+        var module = await this.Module;
+        await module.InvokeVoidAsync("WMBHMRefresh");
     }
 }

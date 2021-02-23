@@ -1,15 +1,10 @@
 export function WMBHMPush(url) {
     var entries = getEntries();
-    var title = WMBHMGetCurrentTitle();
-    var newEntry = { 
-        url: url,
-        title: title
-    };
+    var newEntry = { url: url, title: WMBHMGetCurrentTitle() };
     if ((entries.length < 1) || (entries[entries.length - 1] && entries[entries.length - 1].url !== url)) {
         entries.push(newEntry);
         window.sessionStorage.setItem('wmbhm-entries', JSON.stringify(entries));
     }
-    console.log('New Entry: ', entries);
     return entries.length - 1;
 }
 
@@ -52,8 +47,7 @@ export function WMBHMNativeState () {
 }
 
 export function WMBHMNativePush (state, url) {
-    var title = WMBHMGetCurrentTitle();
-    window.history.pushState(state, title, url);
+    window.history.pushState(state,  WMBHMGetCurrentTitle(), url);
 }
 
 export function WMBHMNativeNavigate (index) {
