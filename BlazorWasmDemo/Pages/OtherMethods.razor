@@ -1,0 +1,68 @@
+@page "/other-methods"
+
+<WMPageTitle PageTitle="Other Methods" />
+
+<h1>Other Methods</h1>
+
+<hr>
+
+<a href="/step-one" class="btn btn-primary">Go to step one.</a>
+
+@if (canNavigate)
+{
+    <button class="btn btn-outline-primary" @onclick="@(e => historyManager.Go(goIndex))">Back to: @goLabel</button> 
+}
+else
+{
+    <span>No go -1</span>
+}
+
+<hr>
+
+<button class="btn btn-secondary" @onclick="@(e => historyManager.Clear())">Clear</button>
+<button class="btn btn-secondary" @onclick="@(e => historyManager.StopWatch())">Stop Watch</button>
+<button class="btn btn-secondary" @onclick="@(e => historyManager.RestoreWatch())">Restore Watch</button>
+<button class="btn btn-secondary" @onclick="@(e => historyManager.Refresh())">Refresh</button>
+<button class="btn btn-secondary" @onclick="@(e => ChangePageTitle())">Change Page Title</button>
+
+<br><hr>
+<p>Is the app using the browser native behavior? <b>@isNativeBehavior</b></p>
+
+<br><br><br>
+
+@implements IDisposable
+
+@code {
+    [Inject] IWMHistoryManager historyManager { get; set; }
+
+    int goIndex = -1;
+    string goLabel { get; set; }
+    bool canNavigate { get; set; } = false;
+    bool isNativeBehavior { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            historyManager.SetCallback(SetInfos);
+        }
+    }
+
+    public async void SetInfos()
+    {
+        canNavigate = historyManager.CanNavigate(goIndex);
+        goLabel = await historyManager.GetGoTitle(goIndex);
+        isNativeBehavior = historyManager.IsUsingBrowserNativeBehavior();
+        StateHasChanged();
+    }
+
+    public async void ChangePageTitle()
+    {
+        await historyManager.SetPageTitle("Page title changed!");
+    }
+
+    public void Dispose()
+    {
+        historyManager.RemoveCallback(SetInfos);
+    }
+}

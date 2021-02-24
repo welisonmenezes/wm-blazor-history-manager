@@ -2,17 +2,61 @@
 <WMPageTitle PageTitle="Step Three" />
 
 <h1>Step Three Sample</h1>
+<p>A programatically <code>Back</code> and <code>Forward</code> implementation samples.</p>
 
 <hr>
 
-<WMHistoryBack 
-    Label="Back to: "
-    ConcatPageTitle="true"
-    AlwaysVisible="false"
-    class="btn btn-outline-primary">
-    <OptionalContent>
-        <a href="/" class="btn btn-primary">Go to Home.</a>
-    </OptionalContent>
-</WMHistoryBack>
+@if (hasBack)
+{
+    <button class="btn btn-outline-primary" @onclick="@(e => historyManager.Back())">Back to: @backLabel</button> 
+}
+else
+{
+    <a href="/" class="btn btn-primary">Go to Home.</a> 
+}
+
+<a href="/step-four" class="btn btn-primary">Go to step four.</a> 
+
+@if (hasForward)
+{
+    <button class="btn btn-outline-primary" @onclick="@(e => historyManager.Forward())">Forward to: @forwardLabel</button> 
+}
+else
+{
+    <span>No forward</span> 
+}
 
 <br><br><br>
+
+@implements IDisposable
+
+@code {
+    [Inject] IWMHistoryManager historyManager { get; set; }
+
+    string backLabel { get; set; }
+    string forwardLabel { get; set; }
+    bool hasBack { get; set; } = false;
+    bool hasForward { get; set; } = false;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            historyManager.SetCallback(SetInfos);
+        }
+    }
+
+    public void SetInfos()
+    {
+        backLabel = historyManager.GetBackTitle();
+        forwardLabel = historyManager.GetForwardTitle();
+        hasBack = historyManager.HasBack();
+        hasForward = historyManager.HasForward();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        historyManager.RemoveCallback(SetInfos);
+    }
+}
