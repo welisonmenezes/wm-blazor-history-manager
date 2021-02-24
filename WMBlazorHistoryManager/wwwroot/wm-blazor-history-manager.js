@@ -1,8 +1,9 @@
-export function WMBHMPush(url) {
-    var entries = getEntries();
+export function WMBHMPush(url, maxSize) {
+    var entries = WMBHMGetEntries();
     var newEntry = { url: url, title: WMBHMGetCurrentTitle() };
     if ((entries.length < 1) || (entries[entries.length - 1] && entries[entries.length - 1].url !== url)) {
         entries.push(newEntry);
+        WMBHMLimitHistorySize(entries, maxSize);
         window.sessionStorage.setItem('wmbhm-entries', JSON.stringify(entries));
     }
     console.log(entries)
@@ -10,12 +11,12 @@ export function WMBHMPush(url) {
 }
 
 export function WMBHMNavigate(index) {
-    var entries = getEntries();
+    var entries = WMBHMGetEntries();
     return (entries[index]) ? entries[index].url : null;
 }
 
 export function WMBHMTotalIndex() {
-    var entries = getEntries();
+    var entries = WMBHMGetEntries();
     return (entries.length > 0) ? (entries.length - 1) : 0;
 }
 
@@ -35,12 +36,12 @@ export function WMBHMGetCurrentTitle() {
 }
 
 export function WMBHMGetTitleByIndex(index) {
-    var entries = getEntries();
+    var entries = WMBHMGetEntries();
     return (entries[index]) ? entries[index].title : null;
 }
 
 export function WMBHMGetUrlByIndex(index) {
-    var entries = getEntries();
+    var entries = WMBHMGetEntries();
     return (entries[index]) ? entries[index].url : null;
 }
 
@@ -60,7 +61,13 @@ export function WMBHMNativeNavigate (index) {
     window.history.go(index);
 }
 
-function getEntries() {
+function WMBHMGetEntries() {
     var oldEntries = JSON.parse(window.sessionStorage.getItem('wmbhm-entries'));
     return (oldEntries && Array.isArray(oldEntries)) ? oldEntries : [];
+}
+
+function WMBHMLimitHistorySize(entries, maxSize) {
+    if (entries.length > maxSize) {
+        entries.shift();
+    }
 }

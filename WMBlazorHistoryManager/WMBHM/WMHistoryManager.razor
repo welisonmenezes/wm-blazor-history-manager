@@ -5,6 +5,7 @@
 @code
 {
     [Parameter] public bool ClearOnReload { get; set; } = false;
+    [Parameter] public int MaxSize { get; set; } = 1000;
 
     [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
     [Inject] protected NavigationManager NavigationManager { get; set; } = null;
@@ -38,6 +39,6 @@
 
     private async Task OnLocationChanged(string location)
     {
-        await HistoryManager.Push(location);
+        await HistoryManager.Push(location, MaxSize);
     }
 }

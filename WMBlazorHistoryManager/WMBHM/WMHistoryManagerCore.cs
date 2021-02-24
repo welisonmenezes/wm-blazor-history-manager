@@ -33,14 +33,14 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         this.useBrowserNativeBehavior = useBrowserNativeBehavior;
     }
 
-    public async Task Push(string url)
+    public async Task Push(string url, int maxSize)
     {   
         if (! this.useBrowserNativeBehavior)
         {
             if (! this.isNavitation && this.isWatching) 
             {
                 var module = await this.Module;
-                this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMPush", url);
+                this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMPush", url, maxSize);
                 this.currentTitle = await module.InvokeAsync<string>("WMBHMGetCurrentTitle");
             }
             if (this.isNavitation)  this.isNavitation = false;
@@ -175,6 +175,14 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     {
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
         return this.forwardTitle;
+    }
+
+    public async Task<string> GetGoTitle(int index)
+    {
+        if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
+        int newIndex = this.currentIndex - (index * -1);
+        var module = await this.Module;
+        return await module.InvokeAsync<string>("WMBHMGetTitleByIndex", newIndex);
     }
 
     public void SetCallback(Action callback)

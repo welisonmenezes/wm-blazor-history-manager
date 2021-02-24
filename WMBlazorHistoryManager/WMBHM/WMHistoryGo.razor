@@ -2,6 +2,10 @@
 {
     <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Go(Index))">
         @Label
+        @if (ConcatPageTitle)
+        {
+            @goTitle
+        }
     </button>
 }
 else
@@ -16,6 +20,7 @@ else
 
 @code {
     [Parameter] public string Label { get; set; }
+    [Parameter] public bool ConcatPageTitle { get; set; } = false;
     [Parameter] public int Index { get; set; }
     [Parameter] public bool AlwaysVisible { get; set; } = false;
     [Parameter] public RenderFragment OptionalContent { get; set; }
@@ -25,6 +30,7 @@ else
     private bool isNativeBehavior { get; set; } = false;
     private bool canNavigate { get; set; } = false;
     private bool haveToShow { get; set; } = false;
+    private string goTitle { get; set; }
 
     protected override void OnInitialized()
     {
@@ -50,6 +56,7 @@ else
         }
         else
         {
+            goTitle = await HistoryManager.GetGoTitle(Index);
             if (AlwaysVisible)
             {
                 haveToShow = true;
