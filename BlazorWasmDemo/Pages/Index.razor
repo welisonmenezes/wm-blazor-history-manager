@@ -1,54 +1,11 @@
 ﻿@page "/"
 
-<WMPageTitle PageTitle="Home Demo" />
+<WMPageTitle PageTitle="Home" />
 
-<h1>Hello, world!</h1>
+<h1>Blazor History Manager - Demo</h1>
 
-Welcome to your new app.
+<hr>
 
-<br><hr><br>
+<a href="/step-one" class="btn btn-primary">Go to step one.</a>
 
-<WMHistoryBack 
-    Label="Voltar para: "
-    ConcatPageTitle="true"
-    AlwaysVisible="false"
-    class="btn btn-primary">
-    <OptionalContent>
-        Sem histórico para voltar
-    </OptionalContent>
-</WMHistoryBack>
-
-<WMHistoryForward 
-    Label="Avançar para: "
-    ConcatPageTitle="true"
-    AlwaysVisible="false"
-    class="btn btn-primary">
-    <OptionalContent>
-        Sem histórico para avançar
-    </OptionalContent>
-</WMHistoryForward>
-
-<WMHistoryGo 
-    Label="Go +1"
-    Index="1"
-    ConcatPageTitle="true"
-    AlwaysVisible="false"
-    class="btn btn-primary">
-    <OptionalContent>
-        Sem histórico para avançar + 1
-    </OptionalContent>
-</WMHistoryGo>
-
-<WMHistoryGo 
-    Label="Go -1"
-    Index="-1"
-    ConcatPageTitle="true"
-    AlwaysVisible="false"
-    class="btn btn-primary">
-    <OptionalContent>
-        Sem histórico para voltar - 1
-    </OptionalContent>
-</WMHistoryGo>
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
+<br><br><br>

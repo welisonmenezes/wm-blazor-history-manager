@@ -35,12 +35,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         isNativeBehavior = HistoryManager.IsUsingBrowserNativeBehavior();
-
         if (SetPageTitle != null)
         {
             await HistoryManager.SetPageTitle(SetPageTitle);
         }
-
         if (isNativeBehavior) 
         {
             setInfos();
@@ -69,7 +67,6 @@ else
                 haveToShow = (backTitle != null) ? true : false;
             }
         }
-        
         StateHasChanged();
     }
 

@@ -1,0 +1,31 @@
+@page "/step-one"
+<WMPageTitle PageTitle="Step One" />
+
+<h1>Step One Sample</h1>
+<p>A <code>WMHistoryBack</code> and <code>WMHistoryForward</code> sample.</p>
+
+<hr>
+
+<WMHistoryBack 
+    Label="Back to: "
+    ConcatPageTitle="true"
+    AlwaysVisible="false"
+    class="btn btn-outline-primary">
+    <OptionalContent>
+        <a href="/" class="btn btn-primary">Go to Home.</a>
+    </OptionalContent>
+</WMHistoryBack>
+
+<a href="/step-two" class="btn btn-primary">Go to step two.</a>
+
+<WMHistoryForward 
+    Label="Forward to: "
+    ConcatPageTitle="true"
+    AlwaysVisible="false"
+    class="btn btn-outline-primary">
+    <OptionalContent>
+        No forward
+    </OptionalContent>
+</WMHistoryForward>
+
+<br><br><br>

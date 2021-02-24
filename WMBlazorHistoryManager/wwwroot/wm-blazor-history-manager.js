@@ -6,7 +6,6 @@ export function WMBHMPush(url, maxSize) {
         WMBHMLimitHistorySize(entries, maxSize);
         window.sessionStorage.setItem('wmbhm-entries', JSON.stringify(entries));
     }
-    console.log(entries)
     return entries.length - 1;
 }
 
@@ -67,7 +66,5 @@ function WMBHMGetEntries() {
 }
 
 function WMBHMLimitHistorySize(entries, maxSize) {
-    if (entries.length > maxSize) {
-        entries.shift();
-    }
+    if (entries.length > maxSize) entries.shift();
 }

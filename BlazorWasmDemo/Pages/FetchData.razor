@@ -1,76 +1,11 @@
 ﻿@page "/fetchdata"
-@inject HttpClient Http
 
-<h1>Weather forecast</h1>
+<WMPageTitle PageTitle="Fetch Data" />
 
-<p>This component demonstrates fetching data from the server.</p>
+<h1>Fetch Data</h1>
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<hr>
 
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
-    Voltar para : @backTitle;
-</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
-    Avançar para: @forwardTitle;
-</button>
+<a href="/step-one" class="btn btn-primary">Go to step one.</a>
 
-@code {
-    [Inject]
-    private IWMHistoryManager HisotryManager { get; set; }
-    private string backTitle { get; set; }
-    private string forwardTitle { get; set; }
-    private WeatherForecast[] forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await HisotryManager.SetPageTitle("Fetch Data");
-        //HisotryManager.SetCallback(setInfos);
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-    }
-
-    protected void setInfos()
-    {
-        backTitle = HisotryManager.GetBackTitle();
-        forwardTitle = HisotryManager.GetForwardTitle();
-        StateHasChanged();
-        System.Console.WriteLine("Callback FetchData");
-    }
-
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
-}
+<br><br><br>

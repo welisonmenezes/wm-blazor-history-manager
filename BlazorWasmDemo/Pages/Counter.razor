@@ -1,40 +1,11 @@
 @page "/counter"
 
+<WMPageTitle PageTitle="Counter" />
+
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
+<hr>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Back())">
-    Voltar para : @backTitle;
-</button>
-<button class="btn btn-primary" @onclick="@(e => HisotryManager.Forward())">
-    Avançar para: @forwardTitle;
-</button>
+<a href="/step-one" class="btn btn-primary">Go to step one.</a>
 
-@code {
-    [Inject]
-    private IWMHistoryManager HisotryManager { get; set; }
-    private string backTitle { get; set; }
-    private string forwardTitle { get; set; }
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await HisotryManager.SetPageTitle("Counter");
-        //HisotryManager.SetCallback(setInfos);
-    }
-
-    protected void setInfos()
-    {
-        //backTitle = HisotryManager.GetBackTitle();
-        //forwardTitle = HisotryManager.GetForwardTitle();
-        StateHasChanged();
-        System.Console.WriteLine("Callback Counter");
-    }
-}
+<br><br><br>
