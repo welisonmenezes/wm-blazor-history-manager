@@ -22,4 +22,5 @@ public interface IWMHistoryManager
     Task Refresh();
     bool IsUsingBrowserNativeBehavior();
     bool CanNavigate(int index);
+    Task<bool> IsSameUrl(int index);
 }

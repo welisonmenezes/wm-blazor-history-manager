@@ -58,9 +58,9 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             if (this.HasBack())
             {
                 this.currentIndex--;
-                string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
+                string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", this.currentIndex);
                 this.isNavitation = true;
-                navigationManager.NavigateTo(backUrl);
+                this.navigationManager.NavigateTo(backUrl);
             }
         } 
         else
@@ -77,9 +77,9 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             if (this.HasForward())
             {
                 this.currentIndex++;
-                string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", currentIndex);
+                string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", this.currentIndex);
                 this.isNavitation = true;
-                navigationManager.NavigateTo(forwardUrl);
+                this.navigationManager.NavigateTo(forwardUrl);
             }
         }
         else
@@ -100,7 +100,7 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
                 this.currentIndex = newIndex;
                 string newUrl = await module.InvokeAsync<string>("WMBHMNavigate", newIndex);
                 this.isNavitation = true;
-                navigationManager.NavigateTo(newUrl);
+                this.navigationManager.NavigateTo(newUrl);
             }
             else
             {
@@ -213,5 +213,16 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
                 callback.Invoke();
             }
         }
+    }
+
+    public async Task<bool> IsSameUrl(int index)
+    {
+        var module = await this.Module;
+        string url = await module.InvokeAsync<string>("WMBHMGetUrlByIndex", index);
+        if (url != null)
+        {
+            return (url.Equals(navigationManager.Uri));
+        }
+        return false;
     }
 }

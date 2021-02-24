@@ -39,6 +39,11 @@ export function WMBHMGetTitleByIndex(index) {
     return (entries[index]) ? entries[index].title : null;
 }
 
+export function WMBHMGetUrlByIndex(index) {
+    var entries = getEntries();
+    return (entries[index]) ? entries[index].url : null;
+}
+
 export function WMBHMRefresh () {
     window.history.go();
 }
