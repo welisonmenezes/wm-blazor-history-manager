@@ -1,0 +1,10 @@
+@code {
+    [Parameter] public string PageTitle { get; set; }
+
+    [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await HistoryManager.SetPageTitle(PageTitle);
+    }
+}

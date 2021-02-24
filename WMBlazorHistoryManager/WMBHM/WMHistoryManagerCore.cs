@@ -217,12 +217,13 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
 
     public async Task<bool> IsSameUrl(int index)
     {
+        int newIndex = this.currentIndex - (index * -1);
         var module = await this.Module;
-        string url = await module.InvokeAsync<string>("WMBHMGetUrlByIndex", index);
+        string url = await module.InvokeAsync<string>("WMBHMGetUrlByIndex", newIndex);
         if (url != null)
         {
             return (url.Equals(navigationManager.Uri));
         }
-        return false;
+        return true;
     }
 }

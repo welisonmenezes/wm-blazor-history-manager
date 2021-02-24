@@ -57,9 +57,9 @@ else
             else
             {
                 haveToShow = ((Index > 0 && canNavigate) || (Index < 0 && canNavigate));
+                bool isSame = await HistoryManager.IsSameUrl(Index);
+                haveToShow = (isSame) ? false : haveToShow;
             }
-            bool isSame = await HistoryManager.IsSameUrl(Index);
-            haveToShow = (! isSame) ? haveToShow : isSame;
         }
         StateHasChanged();
     }

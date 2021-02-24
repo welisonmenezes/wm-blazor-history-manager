@@ -1,5 +1,7 @@
 ﻿@page "/"
 
+<WMPageTitle PageTitle="Home Demo" />
+
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
@@ -10,10 +12,9 @@ Welcome to your new app.
     Label="Voltar para: "
     ConcatPageTitle="true"
     AlwaysVisible="false"
-    SetPageTitle="Home Page"
     class="btn btn-primary">
     <OptionalContent>
-        <a href="/">Go Back Home</a>
+        Sem histórico para voltar
     </OptionalContent>
 </WMHistoryBack>
 
@@ -23,24 +24,30 @@ Welcome to your new app.
     AlwaysVisible="false"
     class="btn btn-primary">
     <OptionalContent>
-        <a href="/">Go Back Home</a>
+        Sem histórico para avançar
     </OptionalContent>
 </WMHistoryForward>
 
 <WMHistoryGo 
-    Label="Go +2"
-    Index="2"
+    Label="Go +1"
+    Index="1"
     ConcatPageTitle="true"
     AlwaysVisible="false"
     class="btn btn-primary">
+    <OptionalContent>
+        Sem histórico para avançar + 1
+    </OptionalContent>
 </WMHistoryGo>
 
 <WMHistoryGo 
-    Label="Go -2"
-    Index="-2"
+    Label="Go -1"
+    Index="-1"
     ConcatPageTitle="true"
     AlwaysVisible="false"
     class="btn btn-primary">
+    <OptionalContent>
+        Sem histórico para voltar - 1
+    </OptionalContent>
 </WMHistoryGo>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
