@@ -1,0 +1,98 @@
+@import '';
+
+/* _content/WMBlazorHistoryManager/WMBHM/WMHistoryBack.razor.rz.scp.css */
+.WMHistoryBack[b-jve5874wuc] {
+    display: inline-block;
+}
+.WMHistoryBack.default button[b-jve5874wuc] {
+    background-image: url(./icons/left-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-left: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryBack.classic button[b-jve5874wuc] {
+    background-image: url(./icons/prev.svg);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-left: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+/* _content/WMBlazorHistoryManager/WMBHM/WMHistoryForward.razor.rz.scp.css */
+.WMHistoryForward[b-z1lyzscwph] {
+    display: inline-block;
+}
+.WMHistoryForward.default button[b-z1lyzscwph] {
+    background-image: url(./icons/right-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryForward.classic button[b-z1lyzscwph] {
+    background-image: url(./icons/next.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+/* _content/WMBlazorHistoryManager/WMBHM/WMHistoryGo.razor.rz.scp.css */
+.WMHistoryGo[b-0bx02vlvvl] {
+    display: inline-block;
+}
+.WMHistoryGo.default button[b-0bx02vlvvl] {
+    background-image: url(./icons/right-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryGo.default.left button[b-0bx02vlvvl] {
+    background-image: url(./icons/left-arrow.svg);
+    background-position: 5px 50%;
+    padding-right: 0;
+    padding-left: 25px;
+}
+.WMHistoryGo.classic button[b-0bx02vlvvl] {
+    background-image: url(./icons/next.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryGo.classic.left button[b-0bx02vlvvl] {
+    background-image: url(./icons/prev.svg);
+    background-position: 5px 50%;
+    padding-right: 0;
+    padding-left: 25px;
+}
