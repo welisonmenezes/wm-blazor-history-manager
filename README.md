@@ -8,6 +8,14 @@ When the implementation of the custom behavior is turned off, the HTML 5 History
 
 But, when the custom behaviour implementation is on, the component will work based on the `sessionStorage` to manage the navigation history. Here, more functionalities will be add to the navigation manager.
 
+## Live Demo
+
+https://welisonmenezes.github.io/wm-blazor-history-manager/
+
+## NuGet Package
+
+https://www.nuget.org/packages/WMBlazorHistoryManager/
+
 ---
 
 ## Setup
