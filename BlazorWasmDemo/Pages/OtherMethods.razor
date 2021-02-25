@@ -24,9 +24,7 @@ else
 <button class="btn btn-secondary" @onclick="@(e => historyManager.RestoreWatch())">Restore Watch</button>
 <button class="btn btn-secondary" @onclick="@(e => historyManager.Refresh())">Refresh</button>
 <button class="btn btn-secondary" @onclick="@(e => ChangePageTitle())">Change Page Title</button>
-
-<br><hr>
-<p>Is the app using the browser native behavior? <b>@isNativeBehavior</b></p>
+<button class="btn btn-secondary" @onclick="@(e => IsNative())">Is native? @isNativeBehavior</button>
 
 <br><br><br>
 
@@ -38,7 +36,7 @@ else
     int goIndex = -1;
     string goLabel { get; set; }
     bool canNavigate { get; set; } = false;
-    bool isNativeBehavior { get; set; }
+    string isNativeBehavior { get; set; } = "";
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -52,13 +50,17 @@ else
     {
         canNavigate = historyManager.CanNavigate(goIndex);
         goLabel = await historyManager.GetGoTitle(goIndex);
-        isNativeBehavior = historyManager.IsUsingBrowserNativeBehavior();
         StateHasChanged();
     }
 
     public async void ChangePageTitle()
     {
         await historyManager.SetPageTitle("Page title changed!");
+    }
+
+    public void IsNative()
+    {
+        isNativeBehavior = (historyManager.IsUsingBrowserNativeBehavior()) ? "Is native" : "is not native";
     }
 
     public void Dispose()

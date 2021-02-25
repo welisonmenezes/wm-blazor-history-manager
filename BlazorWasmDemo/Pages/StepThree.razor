@@ -1,5 +1,4 @@
 @page "/step-three"
-<WMPageTitle PageTitle="Step Three" />
 
 <h1>Step Three Sample</h1>
 <p>A programatically <code>Back</code> and <code>Forward</code> implementation samples.</p>
@@ -42,6 +41,7 @@ else
     {
         if (firstRender)
         {
+            historyManager.SetPageTitle("Step Three");
             historyManager.SetCallback(SetInfos);
         }
     }

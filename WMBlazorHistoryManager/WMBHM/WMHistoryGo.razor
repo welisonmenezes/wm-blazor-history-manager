@@ -28,6 +28,7 @@ else
     [Parameter] public RenderFragment OptionalContent { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> InputAttributes { get; set; }
     [Parameter] public string Theme { get; set; } = "";
+    [Parameter] public string SetPageTitle { get; set; }
 
     [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
 
@@ -37,10 +38,13 @@ else
     private string goTitle { get; set; }
     private string arrowDirection { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         isNativeBehavior = HistoryManager.IsUsingBrowserNativeBehavior();
-
+        if (SetPageTitle != null)
+        {
+            await HistoryManager.SetPageTitle(SetPageTitle);
+        }
         if (isNativeBehavior) 
         {
             setInfos();
@@ -49,7 +53,6 @@ else
         {
             HistoryManager.SetCallback(setInfos);
         }
-
         arrowDirection = (Index < 0) ? "left" : "right";
     }
 
