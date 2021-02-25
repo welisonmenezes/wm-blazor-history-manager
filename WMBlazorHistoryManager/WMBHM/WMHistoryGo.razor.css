@@ -1,0 +1,39 @@
+.WMHistoryGo {
+    display: inline-block;
+}
+.WMHistoryGo.default button {
+    background-image: url(./icons/right-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryGo.default.left button {
+    background-image: url(./icons/left-arrow.svg);
+    background-position: 5px 50%;
+    padding-right: 0;
+    padding-left: 25px;
+}
+.WMHistoryGo.classic button {
+    background-image: url(./icons/next.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryGo.classic.left button {
+    background-image: url(./icons/prev.svg);
+    background-position: 5px 50%;
+    padding-right: 0;
+    padding-left: 25px;
+}

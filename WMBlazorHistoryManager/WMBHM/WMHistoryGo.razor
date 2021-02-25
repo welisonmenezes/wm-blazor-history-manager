@@ -1,12 +1,14 @@
 @if (haveToShow)
 {
-    <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Go(Index))">
-        @Label
-        @if (ConcatPageTitle)
-        {
-            @goTitle
-        }
-    </button>
+    <div class="WMHistoryGo @Theme @arrowDirection">
+        <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Go(Index))">
+            @Label
+            @if (ConcatPageTitle)
+            {
+                @goTitle
+            }
+        </button>
+    </div>
 }
 else
 {
@@ -25,12 +27,15 @@ else
     [Parameter] public bool AlwaysVisible { get; set; } = false;
     [Parameter] public RenderFragment OptionalContent { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> InputAttributes { get; set; }
+    [Parameter] public string Theme { get; set; } = "";
+
     [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
 
     private bool isNativeBehavior { get; set; } = false;
     private bool canNavigate { get; set; } = false;
     private bool haveToShow { get; set; } = false;
     private string goTitle { get; set; }
+    private string arrowDirection { get; set; }
 
     protected override void OnInitialized()
     {
@@ -44,6 +49,8 @@ else
         {
             HistoryManager.SetCallback(setInfos);
         }
+
+        arrowDirection = (Index < 0) ? "left" : "right";
     }
 
     protected async void setInfos()

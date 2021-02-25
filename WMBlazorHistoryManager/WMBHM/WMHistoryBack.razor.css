@@ -1,0 +1,27 @@
+.WMHistoryBack {
+    display: inline-block;
+}
+.WMHistoryBack.default button {
+    background-image: url(./icons/left-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-left: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryBack.classic button {
+    background-image: url(./icons/prev.svg);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-left: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}

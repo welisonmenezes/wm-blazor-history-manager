@@ -1,12 +1,14 @@
 @if (haveToShow)
 {
-    <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Back())">
-        @Label
-        @if (ConcatPageTitle)
-        {
-            @backTitle
-        }
-    </button>
+    <div class="WMHistoryBack @Theme">
+        <button @attributes="InputAttributes" @onclick="@(e => HistoryManager.Back())">
+            @Label
+            @if (ConcatPageTitle)
+            {
+                @backTitle
+            }
+        </button>
+    </div>
 }
 else
 {
@@ -15,6 +17,7 @@ else
         @OptionalContent
     }
 }
+
 
 @implements IDisposable
 
@@ -25,6 +28,7 @@ else
     [Parameter] public bool AlwaysVisible { get; set; } = false;
     [Parameter] public RenderFragment OptionalContent { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> InputAttributes { get; set; }
+    [Parameter] public string Theme { get; set; } = "";
         
     [Inject] protected IWMHistoryManager HistoryManager { get; set; } = null;
 

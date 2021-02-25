@@ -1,0 +1,27 @@
+.WMHistoryForward {
+    display: inline-block;
+}
+.WMHistoryForward.default button {
+    background-image: url(./icons/right-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
+.WMHistoryForward.classic button {
+    background-image: url(./icons/next.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) 50%;
+    background-color: transparent;
+    background-size: 15px;
+    color: #007bff;
+    padding-right: 25px;
+    border: none;
+    min-height: 26px;
+    vertical-align: middle;
+}
