@@ -58,8 +58,7 @@ else
 
     protected async void setInfos()
     {
-        canNavigate = HistoryManager.CanNavigate(Index);
-
+        canNavigate = await HistoryManager.CanNavigate(Index);
         if (isNativeBehavior)
         {
             haveToShow = true;
@@ -73,9 +72,8 @@ else
             }
             else
             {
-                haveToShow = ((Index > 0 && canNavigate) || (Index < 0 && canNavigate));
                 bool isSame = await HistoryManager.IsSameUrl(Index);
-                haveToShow = (isSame) ? false : haveToShow;
+                haveToShow = (isSame) ? false : canNavigate;
             }
         }
         StateHasChanged();

@@ -8,8 +8,8 @@ public interface IWMHistoryManager
     Task Forward();
     Task Push(string url, int maxSize);
     Task Back();
-    bool HasForward();
-    bool HasBack();
+    Task<bool> HasForward();
+    Task<bool> HasBack();
     Task Clear();
     void StopWatch();
     void RestoreWatch();
@@ -22,6 +22,6 @@ public interface IWMHistoryManager
     void RemoveCallback(Action callback);
     Task Refresh();
     bool IsUsingBrowserNativeBehavior();
-    bool CanNavigate(int index);
+    Task<bool> CanNavigate(int index);
     Task<bool> IsSameUrl(int index);
 }

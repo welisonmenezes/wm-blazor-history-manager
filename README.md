@@ -276,12 +276,12 @@ else
 		}
 	}
 
-	public void SetInfos()
+	public async void SetInfos()
 	{
 		backLabel = historyManager.GetBackTitle();
 		forwardLabel = historyManager.GetForwardTitle();
-		hasBack = historyManager.HasBack();
-		hasForward = historyManager.HasForward();
+		hasBack = await historyManager.HasBack();
+		hasForward = await historyManager.HasForward();
 		StateHasChanged();
 	}
 
@@ -350,7 +350,7 @@ else
 
 	public async void SetInfos()
 	{
-		canNavigate = historyManager.CanNavigate(goIndex);
+		canNavigate = await historyManager.CanNavigate(goIndex);
 		goLabel = await historyManager.GetGoTitle(goIndex);
 		StateHasChanged();
 	}

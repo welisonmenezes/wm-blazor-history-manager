@@ -37,15 +37,16 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
     {   
         if (! this.useBrowserNativeBehavior)
         {
-            if (! this.isNavitation && this.isWatching) 
+            if (this.isWatching) 
             {
                 var module = await this.Module;
-                this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMPush", url, maxSize);
+                await module.InvokeAsync<int>("WMBHMPush", url, maxSize);
                 this.currentTitle = await module.InvokeAsync<string>("WMBHMGetCurrentTitle");
             }
-            if (this.isNavitation)  this.isNavitation = false;
-            this.backTitle = (this.HasBack()) ? await GetTitleByIndex((this.currentIndex - 1)) : null;
-            this.forwardTitle = (this.HasForward()) ? await GetTitleByIndex((this.currentIndex + 1)) : null;
+            bool ICanBack = await this.HasBack();
+            bool ICanForward = await this.HasForward();
+            this.backTitle = (ICanBack) ? await GetTitleByIndex((this.currentIndex - 1)) : null;
+            this.forwardTitle = (ICanForward) ? await GetTitleByIndex((this.currentIndex + 1)) : null;
         }
         this.RunCallbacks();
     }
@@ -55,12 +56,11 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         var module = await this.Module;
         if (! this.useBrowserNativeBehavior)
         {
-            if (this.HasBack())
+            bool ICanNav = await this.HasBack();
+            if (ICanNav)
             {
-                this.currentIndex--;
-                string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", this.currentIndex);
-                this.isNavitation = true;
-                this.navigationManager.NavigateTo(backUrl);
+                string backUrl = await module.InvokeAsync<string>("WMBHMNavigate", -1);
+                if (backUrl != null) this.navigationManager.NavigateTo(backUrl);
             }
         } 
         else
@@ -74,12 +74,11 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         var module = await this.Module;
         if (! this.useBrowserNativeBehavior)
         {
-            if (this.HasForward())
+            bool ICanNav = await this.HasForward();
+            if (ICanNav)
             {
-                this.currentIndex++;
-                string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", this.currentIndex);
-                this.isNavitation = true;
-                this.navigationManager.NavigateTo(forwardUrl);
+                string forwardUrl = await module.InvokeAsync<string>("WMBHMNavigate", 1);
+                if (forwardUrl != null) this.navigationManager.NavigateTo(forwardUrl);
             }
         }
         else
@@ -95,12 +94,10 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
             var module = await this.Module;
             if (! this.useBrowserNativeBehavior)
             {
-                if (!CanNavigate(index)) return;
-                int newIndex = this.currentIndex - (index * -1);
-                this.currentIndex = newIndex;
-                string newUrl = await module.InvokeAsync<string>("WMBHMNavigate", newIndex);
-                this.isNavitation = true;
-                this.navigationManager.NavigateTo(newUrl);
+                bool ICanNav = await CanNavigate(index);
+                if (!ICanNav) return;
+                string newUrl = await module.InvokeAsync<string>("WMBHMGo", index);
+                if (newUrl != null) this.navigationManager.NavigateTo(newUrl);
             }
             else
             {
@@ -109,35 +106,32 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
         }
     }
 
-    public bool CanNavigate(int index)
+    public async Task<bool> CanNavigate(int index)
     {
-        int newIndex = this.currentIndex - (index * -1);
-        if (index < 0 && newIndex < 0) return false;
-        if (index > 0 && newIndex > this.totalIndex) return false;
-        return true;
+        var module = await this.Module;
+        return await module.InvokeAsync<bool>("WMBHMCanNavigate", index);
     }
 
     public async Task Clear()
     {
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
         var module = await this.Module;
-        this.totalIndex = this.currentIndex = await module.InvokeAsync<int>("WMBHMClear", navigationManager.Uri);
+        await module.InvokeAsync<int>("WMBHMClear", navigationManager.Uri);
         this.backTitle = this.forwardTitle = null;
-        this.isNavitation = false;
         this.isWatching = true;
         this.RunCallbacks();
     }
 
-    public bool HasForward()
+    public async Task<bool> HasForward()
     {
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
-        return (this.currentIndex <  this.totalIndex);
+        return await this.CanNavigate(1);
     }
 
-    public bool HasBack()
+    public async Task<bool> HasBack()
     {
         if (this.useBrowserNativeBehavior) throw new ArgumentException("Not supported if useBrowserNativeBehavior is true.");
-        return (this.currentIndex > 0);
+        return await this.CanNavigate(-1);
     }
 
     public void StopWatch()
@@ -225,9 +219,8 @@ public sealed class WMHistoryManagerCore : IWMHistoryManager
 
     public async Task<bool> IsSameUrl(int index)
     {
-        int newIndex = this.currentIndex - (index * -1);
         var module = await this.Module;
-        string url = await module.InvokeAsync<string>("WMBHMGetUrlByIndex", newIndex);
+        string url = await module.InvokeAsync<string>("WMBHMGetUrlByIndex", index);
         if (url != null)
         {
             return (url.Equals(navigationManager.Uri));

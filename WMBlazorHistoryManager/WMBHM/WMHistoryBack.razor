@@ -35,6 +35,7 @@ else
     private string backTitle { get; set; }
     private bool haveToShow { get; set; } = false;
     private bool isNativeBehavior { get; set; } = false;
+    private bool canNavigate { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,7 +54,7 @@ else
         }
     }
 
-    protected void setInfos()
+    protected async void setInfos()
     {
         if (isNativeBehavior)
         {
@@ -62,13 +63,14 @@ else
         else
         {
             backTitle = HistoryManager.GetBackTitle();
+            canNavigate = await HistoryManager.CanNavigate(-1);
             if (AlwaysVisible)
             {
                 haveToShow = true;
             }
             else
             {
-                haveToShow = (backTitle != null) ? true : false;
+                haveToShow = canNavigate;
             }
         }
         StateHasChanged();

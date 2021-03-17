@@ -48,7 +48,7 @@ else
 
     public async void SetInfos()
     {
-        canNavigate = historyManager.CanNavigate(goIndex);
+        canNavigate = await historyManager.CanNavigate(goIndex);
         goLabel = await historyManager.GetGoTitle(goIndex);
         StateHasChanged();
     }
