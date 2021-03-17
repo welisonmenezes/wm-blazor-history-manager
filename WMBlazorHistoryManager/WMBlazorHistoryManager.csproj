@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/welisonmenezes/wm-blazor-history-manager</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>history forward history-api back history-manager blazor-history-manager blazor-back blazor-forward blazor-history-api</PackageTags>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
