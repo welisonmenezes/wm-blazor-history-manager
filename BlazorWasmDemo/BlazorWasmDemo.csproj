@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="WMBlazorHistoryManager " Version="1.0.0" /> -->
+    <!-- <PackageReference Include="WMBlazorHistoryManager " Version="1.0.1" /> -->
     <ProjectReference Include="..\WMBlazorHistoryManager\WMBlazorHistoryManager.csproj" />
   </ItemGroup>
 
